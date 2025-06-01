@@ -33,3 +33,29 @@ int main(){
     }
 }
 // loop
+
+#include <bits/stdc++.h>
+using namespace std;
+int main(){
+    long long N;
+    cin>>N;
+    long long m;
+    long long c=0; //represneting fib(1)
+    long long d=1; // reprenting fib(2)
+    if(N==1){
+        cout<<0;
+    }
+    else if(N==2){
+        cout<<1;
+    }
+    else{
+        for(int i=3; i<=N; i++){
+            m=c+d;
+            c=d;
+            d=m;
+        }
+    cout<<m;
+    }
+}
+
+/*had to make it long long instead of int int*/
