@@ -86,3 +86,30 @@ int main(){
 
 // worked for first 8 test cases but then an error occurredddd🥀🥀💔💔
 
+
+// correct sol
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+    int T;
+    cin >> T;
+    while (T--) {
+        int n;
+        cin >> n;
+        int ans=0;
+        vector<int> a(n);
+        for (int i=0; i<n; i++) cin >> a[i];
+        set<int> cur, seen;
+        for(int i=0; i<n; i++){
+            cur.insert(a[i]);
+            seen.insert(a[i]);
+            if(cur.size()==seen.size()){
+                ans++;
+                seen.clear();
+            }
+        }
+        cout<<ans<<'\n';
+    }
+    return 0;
+}
+
