@@ -1,0 +1,66 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main(){
+    int t;
+    cin>>t;
+    while(t--){
+        int n;
+        cin>>n;
+        int a[n], b[n];
+        for(int i=0; i<n; i++) cin>>a[i];
+        for(int i=0; i<n; i++) cin>>b[i];
+        int i=n-1;
+        unordered_set<int> alter1, alter2;
+        for(; i>=-1; i--){
+            if(i==-1) break;
+            if(a[i]==b[i]) break;
+            if(i%2==0){
+                if(alter1.count(a[i])) break;
+                if(alter2.count(b[i])) break;
+                if(i+1<n) alter2.insert(a[i+1]);
+                if(i+1<n) alter1.insert(b[i+1]);
+                if(alter2.count(a[i])) break;
+                if(alter1.count(b[i])) break;
+            }else{
+                if(alter2.count(a[i])) break;
+                if(alter1.count(b[i])) break;
+                if(i+1 < n) alter1.insert(a[i+1]);
+                if(i+1 < n) alter2.insert(b[i+1]);
+                if(alter1.count(a[i])) break;
+                if(alter2.count(b[i])) break;
+            }
+        }
+        cout<<i+1<<"\n";
+    }
+}
+
+/*
+High-Level Idea
+Rather than simulate all those copy moves (which is complicated!), this solution works backwards from the end of the arrays, asking:
+
+“How many boxes at the right end can I guarantee to make match, no matter what happens further left?”
+
+It finds the longest suffix (rightmost part) where you can force Aⱼ = Bⱼ, given the freedom to remove one pair and do as many neighbor-copies as you like.
+
+Goal at each i: decide if it’s possible to force A[i] == B[i] by some combination of neighbor-copy moves from the right.
+
+alter1 and alter2 collect the values that could be “brought in” from position i+1 onward, alternating row roles on each step.
+
+If at any point the current a[i] (or b[i]) already appears in the corresponding “available” set, we know we can force a match here—so we keep going left.
+
+If it doesn’t appear, we must stop: we cannot fix this position, so the suffix beyond i is the maximal we can guarantee.
+
+Answer
+
+After the loop stops at some i (or at i = -1 meaning “we matched everything”), it prints i + 1.
+
+Why i+1? Because if you can’t guarantee a match at index i, all positions strictly to its right—that is, indices i+1, i+2, …, n-1—are the ones you can match. There are exactly n - (i+1) of those, but since we print positions (1-based), the code prints i+1 as the count of matched prefix length removed. Equivalently, it’s the size of the largest suffix you can match, which is the desired maximum matches.
+
+In Plain English
+Scan from the end to see how many boxes at the right you can “lock in” as equal by cleverly copying neighbors.
+
+Maintain two sets of “possible values” you can propagate inward from position n, alternating between copying A→B and B→A.
+
+As long as each new pair (A[i], B[i]) can be forced into one of those available values, you extend your matching suffix.
+
+The moment you hit a position that can’t be fixed, you stop, and the number of boxes you’ve “fixed” (i.e. the length of that matching suffix) is your answer*/
