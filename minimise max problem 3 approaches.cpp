@@ -138,9 +138,81 @@ int main(){
 
 
 
-TC: (nlogn + klogn)
-  sc : o(n-1)
+//TC: (nlogn + klogn)
+  //sc : o(n-1)
 
-  not the most optimal sol
-can reduce space complexity!!!!
-  
+
+
+// binary search sol
+
+#include <bits/stdc++.h>
+using namespace std;
+int numberOfGasStationsRequired(long double dist, vector<int> &arr){
+    int count =0;
+    for(int i=1; i<arr.size(); i++){
+        int numberInBetween = ((arr[i]-arr[i-1])/dist);
+        if((arr[i]-arr[i-1])/dist == numberInBetween*dist){
+            numberInBetween--;
+        }
+        count += numberInBetween;
+    }
+    return count;
+}
+/* for each segment it calculates 
+the length of the segment
+divide the segment into smaller section of length<=dist 
+no of extra stations req in this smaller section of length is
+(arr[i] - arr[i-1]) / dist
+If the segment divides perfectly into equal parts (e.g., 10/2 = 5 + 5), then we only need (parts - 1) stations.
+Otherwise, floor() works naturally.
+loop starts from i=1 and not i=0 otherwise arr[i-1] causes out of bounds*/
+long double minimiseMaxDistance(vector<int> &arr, int k){
+    int n = arr.size(); // no of original gas stations
+    long double low = 0;
+    long double high = 0;
+    for(int i=0; i<n-1; i++){
+        high = max(high, (long double)(arr[i+1]-arr[i]));
+        // max distance between any 2 consecutive stations segment cannot be larger than that
+    }
+    long double diff = 1e-6;
+    while(high -low>diff){
+        long double mid = (low+high)/(2.0);
+        int count = numberOfGasStationsRequired(mid, arr);
+        if(count>k){
+            low = mid;
+        }else{
+            high = mid;
+        }
+    }
+    return high;
+}
+/*
+guess a vlue mid
+check how many stations would be req if we want no segment to be longer than mid
+if u need more station than allowed mid is too small
+keep doing untill high-low is very small*/
+/*
+check that how many gas stations would be needed so that no segment is longer than mid
+if that mid is less than or equal to k then this mid is valid sol
+or maybe we can do bettwe i.e reduce the max distances
+otheriwse increase mid
+*/
+/*tc is o(n*log(maxlength/e))*/
+int main(){
+    int n, k;
+    cout<<"enter no of existing gas stations: ";
+    cin>>n;
+    vector<int> arr(n);
+    cout<<"enter positions of the gas stations in increasing order: ";
+    for(int i=0; i<n; i++){
+        cin>>arr[i];
+    }
+    cout<<"enter no of new gas stations to add (k)";
+    cin>>k;
+    long double result = minimiseMaxDistance(arr, k);
+    cout<<fixed<<setprecision(6);
+    cout<<"Minimum possible maximum distance: "<<result<<endl;
+    return 0;
+}
+
+optimal sol
