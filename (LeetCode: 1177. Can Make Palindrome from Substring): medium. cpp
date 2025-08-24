@@ -1,0 +1,96 @@
+class Solution {
+public:
+    vector<bool> canMakePaliQueries(string s, vector<vector<int>>& queries) {
+        int freq[256] = {0};
+        for(char c: s) freq[c]++;
+        int OddC = 0;
+        for(int i=0; i<256; i++){
+            if(freq[i]%2!=0) OddC++;
+        }
+        if(queries[i][2] >= (OddC/2)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+};
+/*
+You counted frequency of the entire string at the start
+ but each query asks for substring s[l...r]
+you directly returned a single true/false
+ but the problem asks for an array of answers one per query
+you used queries[i] outside of a loop - variable i not declared
+so thats why wrong
+*/
+case 1 : Brute Force 
+N, Q <= 10^-3
+class Solution {
+public:
+    vector<bool> canMakePaliQueries(string s, vector<vector<int>>& queries) {
+        vector<bool> ans;
+        for(auto &a : queries){ // iterating through each query
+            int l = a[0]; // setting up l
+            int r = a[1]; // setting up r
+            int k = a[2]; // setting up k
+            int freq[26] = {0}; // making a freq array
+            for(int i=l; i<=r; i++){ // going from l to r
+                freq[s[i]-'a']++; // calc freq of each element
+            } 
+            int OddC = 0; // making odd count
+            for(int i=0; i<26; i++){ 
+                if(freq[i]%2!=0) OddC++; // calculating how many time odd count 
+            }
+            int m = OddC/2; // odd/2
+            ans.push_back(m<=k); // return true or false into ans array for each query
+        }
+        return ans;
+    }
+};
+/*
+also when we say
+N, Q <= 10^3
+both String and Query take 10^3*/
+/* sol failed, gives tle
+Constraints:
+
+1 <= s.length, queries.length <= 105
+0 <= lefti <= righti < s.length
+0 <= ki <= s.length
+s consists of lowercase English letters.
+
+it should be of 10^5*/
+/* for case 2
+we can't brute force 
+cuz if 10^5 >= n, q
+it would be 10^5*10^5 which is too time taking and ineffecient
+so what we do is prefix frequency using a freq array of size 26*/
+
+
+class Solution {
+public:
+    vector<bool> canMakePaliQueries(string s, vector<vector<int>>& queries) {
+        int n = s.size();
+        vector<vector<int>> pref(n, vector<int>(26, 0));
+        for(int i=0; i<n; i++){
+            if(i>0) pref[i] = pref[i-1];
+            pref[i][s[i]-'a']++;
+        }
+        vector<bool> ans;
+        for(auto &a : queries){
+            int l = a[0];
+            int r = a[1];
+            int k = a[2];
+            int OddC = 0;
+            for(int i=0; i<26; i++){
+                int freq = pref[r][i] - (l>0 ? pref[l-1][i] :0);
+                if(freq%2 != 0) OddC++;
+            }
+            ans.push_back(OddC/2 <= k);
+        }
+        return ans;
+    }
+};
+
+case 3
+each query O(N)
+
