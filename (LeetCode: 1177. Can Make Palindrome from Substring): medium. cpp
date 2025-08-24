@@ -90,7 +90,78 @@ public:
         return ans;
     }
 };
-
+/*
 case 3
 each query O(N)
+1️⃣ What is prefix[i+1]?
+
+Think of it as a 26-bit number representing letters 'a' to 'z'.
+
+Each bit = 1 if that letter has appeared an odd number of times from index 0 to i.
+
+Each bit = 0 if that letter has appeared an even number of times.
+
+Example:
+
+'a' → bit 0
+
+'b' → bit 1
+
+'c' → bit 2
+
+2️⃣ How ^ (XOR) works
+
+XOR toggles a bit:
+
+x	y	x ^ y
+0	0	0
+0	1	1
+1	0	1
+1	1	0
+
+So:
+
+If you XOR with a letter’s bit once → 0 → 1 (odd)
+
+XOR again → 1 → 0 (even)
+
+This automatically keeps track of odd/even counts.
+
+3️⃣ Example: "abca"
+
+We process string:
+
+i	char	bit (1 << (s[i]-'a'))	prefix[i+1] = prefix[i]^bit
+0	a	000...001	0 ^ 1 = 1
+1	b	000...010	1 ^ 2 = 3
+2	c	000...100	3 ^ 4 = 7
+3	a	000...001	7 ^ 1 = 6
+
+prefix[4] = 6 → bits for b and c are 1 (odd), a is 0 (even). ✅
+
+4️⃣ How mask = prefix[r+1] ^ prefix[l] works
+
+We want odd/even letters in substring [l, r].
+
+prefix[r+1] = odd/even counts from start to r
+
+prefix[l] = odd/even counts from start to l-1
+
+XOR cancels letters before l, leaving only counts in [l,r]
+
+Example: substring "bc" → indices [1,2]
+
+prefix[3] = 7 (a,b,c)
+
+prefix[1] = 1 (a)
+
+mask = 7 ^ 1 = 6 → bits 1 and 2 set → b and c appear odd → correct! ✅
+
+5️⃣ Count how many letters are odd
+int oddCount = __builtin_popcount(mask);
+
+
+__builtin_popcount(x) counts number of 1 bits in x
+
+Here it gives #letters with odd frequency in substring [l,r].*/
 
