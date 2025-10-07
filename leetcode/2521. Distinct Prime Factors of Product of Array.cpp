@@ -50,3 +50,33 @@ public:
     }
 };
 // stil can be optimised further
+// beats 80%
+
+class Solution {
+public:
+// store prime till sqrt 1000
+    int ps[11] = {2,3,5,7,11,13,17,19,23,29,31};
+    int distinctPrimeFactors(vector<int>& nums) {
+        // nums[i] <= 1000
+        // nums.length <=10^4
+        // we only need primes up to sqrt 1000
+        int prime[10001] = {0};
+        for(int num : nums){
+            int n = num; // keep original num
+            for(int p : ps){
+                if(n % p == 0){
+                    prime[p] = 1;
+                    while(n % p == 0) n /= p;
+                }
+            }
+            if(n > 1) prime[n] = 1; // leftover large prime
+        }
+        int count = 0;
+        for(int i = 2; i <= 1000; i++)
+            if(prime[i]) count++;
+
+        return count;
+    }
+};
+
+// beats 86%
