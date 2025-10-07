@@ -18,6 +18,18 @@ map<int, int> primeFactorise(long long x){
     }
     return factors;
 }
+// same thing use this
+map<int, int> primeFactorise(int n) {
+    map<int, int> mp;
+    for (int i = 2; i * i <= n; i++) {
+        while (n % i == 0) {
+            mp[i]++;
+            n /= i;
+        }
+    }
+    if (n>1) mp[n]++;
+    return mp;
+    }
 signed main(){
     ios_base::sync_with_stdio(false);
     cin.tie(0);
@@ -30,3 +42,4 @@ signed main(){
         cout<<p.first<<"^"<<p.second<<"\n";
     }
 }
+
