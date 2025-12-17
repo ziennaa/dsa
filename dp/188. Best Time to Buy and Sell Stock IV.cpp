@@ -27,3 +27,42 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    int maxProfit(int k, vector<int>& prices) {
+        int n = prices.size();
+        int total_profit = 0;
+        int temp = 0;
+        if(n==0) return 0;
+        if(k>=n/2){
+            // greedy approach we can go with
+            // max transactions for n is n/2
+            // so if k>=n/2 large can cover all and doesn't care of the case of atmost
+            for(int i=0; i<n-1; i++){
+                if(prices[i]<prices[i+1]){
+                    temp += prices[i+1]-prices[i];
+                }
+                total_profit += temp;
+                temp=0;
+            }
+            return total_profit;
+        }
+        // now for othercases we'll use dp
+        const int sm = -1e9;
+        vector<int> cash(k+1, sm), hold(k+1, sm);
+        cash[0] = 0;
+        for(int p: prices){
+            vector<int> newcash = cash, newhold = hold;
+            newhold[0] = max(hold[0], cash[0]-p);
+            for(int i=1; i<=k; i++){
+                newcash[i] = max(cash[i], hold[i-1]+p);
+                newhold[i] = max(hold[i], cash[i]-p);
+            }
+            cash.swap(newcash);
+            hold.swap(newhold);
+        }
+        return *max_element(cash.begin(), cash.end());
+    }
+};
