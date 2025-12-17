@@ -12,3 +12,11 @@ int main(){
   }
   cout<<prev<<"\n";
 }
+
+/*
+prev and prev2 and curi is saving space
+otherwise you coulve used dp[i] = dp[i-1]+dp[i-2]
+wouldve resulted same
+but SC would O(N)
+here its O(1)
+  and TC is O(N)*/
