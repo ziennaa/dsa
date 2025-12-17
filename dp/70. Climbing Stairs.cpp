@@ -10,3 +10,10 @@ public:
         return dp[n];
     }
 };
+
+/*
+How to identify DP? 
+count total no of ways
+max/min
+try all possible ways ::::: :::::: ::::::::: :::: RECURSION
+*/
