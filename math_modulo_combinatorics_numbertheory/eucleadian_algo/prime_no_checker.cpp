@@ -15,3 +15,6 @@ signed main(){
     else cout<<"no "<<n<<" is not prime \n";
     return 0;
 }
+
+// TC : O(root n) works effeciently till <10^12
+// could've gone till n as generic approach but that's not optimised. 
