@@ -28,3 +28,14 @@ signed main(){
 // Only one prime factor > sqrt(N) can exist.
 // If any prime factor remains after the loop, it must be > N
 ​
+// why i*i here?
+// if number x has any composite structure left it must have factor <= root x
+// assuming x = a*b
+// a > root x and b > root x
+// a*b > x
+//  not possible
+// so if x is composite at least one factor must be <= root x
+// so basically i*i till x 
+// checking all possible small factors
+// if none divides x then x cannot be composite
+//“A composite number cannot be made from two numbers that are both bigger than its square root.”
